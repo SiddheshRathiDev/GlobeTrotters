@@ -10,32 +10,36 @@ mobile_number varchar(12),
 profile_photo varchar(200)
 );
 
-create table photo (
-photo_id int auto_increment primary key,
+create table post (
+post_id int auto_increment primary key,
 user_id int,
 photo_url varchar(500),
 created_datetime datetime,
 caption varchar(200),
+likes_count int,
+comments_count int,
 foreign key (user_id) references user(user_id) on delete cascade on update cascade
 );
 
-create table photo_likes (
+
+
+create table post_likes (
 like_id int primary key auto_increment,
-photo_id int,
+post_id int,
 user_id int,
 created_datetime datetime,
 foreign key (user_id) references user(user_id) on delete cascade on update cascade,
-foreign key (photo_id) references photo(photo_id) on delete cascade on update cascade
+foreign key (post_id) references post(post_id) on delete cascade on update cascade
 
 );
 
-create table photo_comments (
+create table post_comments (
 comment_id int primary key auto_increment,
-photo_id int,
+post_id int,
 user_id int,
 created_datetime datetime,
 foreign key (user_id) references user(user_id) on delete cascade on update cascade,
-foreign key (photo_id) references photo(photo_id) on delete cascade on update cascade
+foreign key (post_id) references post(post_id) on delete cascade on update cascade
 );
 
 create table community (
@@ -56,8 +60,10 @@ create table trip (
 trip_id int primary key auto_increment,
 user_id int,
 itinerary varchar(500),
+interested_count int,
 foreign key (user_id) references user(user_id) on delete cascade on update cascade
 );
+
 
 create table interested (
 interested_id int primary key auto_increment,
@@ -96,11 +102,12 @@ foreign key (user_following) references user(user_id) on delete cascade on updat
 
 create table admin (
 admin_id int,
-user_id int,
-foreign key (user_id) references user(user_id) on delete cascade on update cascade
+foreign key (admin_id) references user(user_id) on delete cascade on update cascade
 );
 
+
 show tables;
+
 
 
 
