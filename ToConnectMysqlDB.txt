@@ -15,3 +15,9 @@ dotnet ef dbcontext scaffold Name=DacProjectDB Pomelo.EntityFrameworkCore.MySql 
 dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson
 
 
+builder.Services.AddDbContext<DacprojectContext>(
+options =>
+{
+    options.UseMySql(builder.Configuration.GetConnectionString("DacProjectDB"),
+        Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.34-mysql"));
+});
