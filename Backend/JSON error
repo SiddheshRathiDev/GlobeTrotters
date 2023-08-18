@@ -1,0 +1,10 @@
+in program.cs 
+add
+
+builder.Services.AddSwaggerGen(c => {
+    c.MapType<DateOnly>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "date"
+    });
+});
