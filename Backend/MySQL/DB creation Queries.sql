@@ -18,7 +18,11 @@ create table post (
 post_id int auto_increment primary key,
 user_id int,
 post_url varchar(500),
-location varchar(200),
+
+latitude double,
+longitude double,
+location_name varchar(200),
+
 created_datetime datetime,
 caption varchar(200),
 likes_count int,
@@ -74,7 +78,11 @@ foreign key (community_id) references community(community_id) on delete cascade 
 create table trip (
 trip_id int primary key auto_increment,
 user_id int,
-location varchar(200),
+
+latitude double,
+longitude double,
+location_name varchar(200),
+
 itinerary varchar(500),
 interested_count int,
 extra1 varchar(0),
