@@ -53,7 +53,11 @@ const ExpandMore = styled((props) => {
     }),
 }));
 
-export default function Post(postId) {
+
+
+
+export default function CopyPost(postId) {
+    
     const [expanded, setExpanded] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [colorLike, setColorLike] = useState("");
@@ -61,16 +65,22 @@ export default function Post(postId) {
     const [comments, setComments] = useState([]);
     const [numberOfComments, setNumberOfComments] = useState(0);
     const [postComment, setPostComment] = useState("");
+    const [userName, setUserName] = useState([]);
+
     const userId = useSelector((state) => state.auth.userId);
+    //const userId = 4;
     
     const [ifLiked, setIfLiked] = useState(0);
     
 
     
     var navigate = useNavigate();
+    
     useEffect(() => {
 
+         getLikes()
 
+        console.log("in post");
         //var paths = "/api/PostLikes/GetData?userId=40&postId=2";
         const path = createUrl("/api/PostLikes/GetData?userId=" + userId + "&postId=" + postId);
 
@@ -119,10 +129,25 @@ export default function Post(postId) {
             })
 
 
+            //get username and location
+            const pathForUsername = createUrl("/api/posts/getUserName/" + postId);
+
+            axios.get(pathForUsername)
+            .then((response) => {
+              setUserName(response.data);
+              console.log(userName.locationName);
+
+
+            })
+            .catch((error) => {
+                console.log(error);
+            })
 
 
 
-    }, [colorLike, postComment, numberOfComments])
+
+
+    }, [colorLike, postComment, numberOfComments, numberOfLikes])
 
 
 
@@ -290,8 +315,8 @@ export default function Post(postId) {
 
                                 </div>
                             }
-                            title="Abhijeet Shinde"
-                            subheader="Himalaya, India"
+                            title={userName.map(u=> {return(<>{u.userName}</>)})}
+                            subheader={userName.map(u=> {return(<>{u.locationName}</>)})}
                         />
                         <CardMedia
                             component="img"
@@ -308,7 +333,7 @@ export default function Post(postId) {
                             <IconButton aria-label="add to favorites">
                                 <FavoriteIcon onClick={handleLike} style={{ color: colorLike }} />
                                 <Typography fontSize={16}>{numberOfLikes} Likes</Typography>
-                                < div onLoad={getLikes()}></div> 
+                                {/* < div onLoad={getLikes()}></div>  */}
                             </IconButton>
 
 

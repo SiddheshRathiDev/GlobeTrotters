@@ -15,6 +15,7 @@ async function GetData()
     const [likes, setLikes] = useState(0);
 
   useEffect(() => {
+    
     async function fetchData() {
       const postId = 2; // Replace with the actual post ID
       const likesCount = await GetLikes();
