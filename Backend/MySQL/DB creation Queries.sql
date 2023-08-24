@@ -7,7 +7,7 @@ name varchar(50),
 dob date,
 gender varchar(10),
 mobile varchar(12),
-profile_photo longblob,
+profile_photo varchar(200),
 extra1 varchar(0),
 extra2 varchar(0),
 extra3 varchar(0),
@@ -17,7 +17,7 @@ extra4 varchar(0)
 create table post (
 post_id int auto_increment primary key,
 user_id int,
-post_image longblob,
+post_url varchar(200),
 
 latitude double,
 longitude double,
