@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Dacproject.Data;
 using Dacproject.Models;
 using WebApplicationMySql.DTO;
+using GlobeTrotters.DTO;
 
 namespace WebApplicationMySql.Controllers
 {
@@ -23,33 +24,41 @@ namespace WebApplicationMySql.Controllers
         }
 
         // GET: api/PostComments
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<PostComment>>> GetPostComments()
+        [HttpGet("{postId}")]
+        public ActionResult GetPostCommentsById(int postId)
         {
-          if (_context.PostComments == null)
-          {
-              return NotFound();
-          }
-            return await _context.PostComments.ToListAsync();
-        }
-
-        // GET: api/PostComments/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PostComment>> GetPostComment(int id)
-        {
-          if (_context.PostComments == null)
-          {
-              return NotFound();
-          }
-            var postComment = await _context.PostComments.FindAsync(id);
-
-            if (postComment == null)
+            if (_context.PostComments == null)
             {
                 return NotFound();
             }
+            
+            var comments = from comment in _context.PostComments
+                           where comment.PostId == postId
+                           join user in _context.Users on comment.UserId equals user.UserId
+                           select new { comment.CommentContent, user.UserName };
 
-            return postComment;
+            // Return the results as a list.
+            return Ok(comments.ToList());
+
         }
+
+        // GET: api/PostComments/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<PostComment>> GetPostComment(int id)
+        //{
+        //  if (_context.PostComments == null)
+        //  {
+        //      return NotFound();
+        //  }
+        //    var postComment = await _context.PostComments.FindAsync(id);
+
+        //    if (postComment == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return postComment;
+        //}
 
         // PUT: api/PostComments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -82,6 +91,8 @@ namespace WebApplicationMySql.Controllers
             return NoContent();
         }
 
+
+
         // POST: api/PostComments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -91,7 +102,22 @@ namespace WebApplicationMySql.Controllers
           {
               return Problem("Entity set 'DacprojectContext.PostComments'  is null.");
           }
-            _context.PostComments.Add(new PostComment(postCommentDTO));
+
+            PostComment postComment = new PostComment();
+            postComment.PostId = postCommentDTO.PostId;
+            postComment.UserId = postCommentDTO.UserId;
+            postComment.CommentContent = postCommentDTO.CommentContent;
+            postComment.CreatedDatetime = DateTime.Now;
+
+            
+            _context.PostComments.Add(postComment);
+
+            Post post = (from tempPost in _context.Posts
+                         where tempPost.PostId == postCommentDTO.PostId
+                         select tempPost).First();
+            var commentCount = ++post.CommentsCount;
+
+
             await _context.SaveChangesAsync();
 
             return postCommentDTO;

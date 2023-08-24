@@ -23,7 +23,7 @@ namespace WebApplicationMySql.Controllers
         }
 
         // GET: api/PostLikes
-        [HttpGet]
+        [HttpGet()]
         public async Task<ActionResult<IEnumerable<PostLike>>> GetPostLikes()
         {
           if (_context.PostLikes == null)
@@ -34,16 +34,18 @@ namespace WebApplicationMySql.Controllers
         }
 
         // GET: api/PostLikes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<PostLike>> GetPostLike(int id)
+        [HttpGet("{postId}")]
+        public async Task<ActionResult<int>> GetNumbeOfLikesPerPost(int postId)
         {
           if (_context.PostLikes == null)
           {
               return NotFound();
           }
-            var postLike = await _context.PostLikes.FindAsync(id);
+            var postLike =  (from post in _context.PostLikes
+                            where post.PostId == postId
+                            select post).Count();
 
-            if (postLike == null)
+            if (postLike == 0)
             {
                 return NotFound();
             }
@@ -51,55 +53,66 @@ namespace WebApplicationMySql.Controllers
             return postLike;
         }
 
-        // PUT: api/PostLikes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPostLike(int id, PostLike postLike)
+
+        [HttpGet("GetData")]
+        public async Task<ActionResult<int>> WhoLiked([FromQuery] int userId, [FromQuery] int postId)
         {
-            if (id != postLike.LikeId)
+            if (_context.PostLikes == null)
             {
-                return BadRequest();
+                return NotFound();
             }
-
-            _context.Entry(postLike).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PostLikeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                dynamic postLike = (from post in _context.PostLikes
+                                    where post.PostId == postId && post.UserId == userId
+                                    select post).First();
+                return 1;
 
-            return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            
+            
+
         }
+
+
+
+       
+        
 
         // POST: api/PostLikes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<PostLikeDTO>> PostPostLike(PostLikeDTO postLikeDTO)
+        [HttpPost("insertLike")]
+        public async Task<ActionResult<string>> PostPostLike([FromQuery] int userId, [FromQuery] int postId)
         {
           if (_context.PostLikes == null)
           {
               return Problem("Entity set 'DacprojectContext.PostLikes'  is null.");
           }
-            _context.PostLikes.Add(new PostLike(postLikeDTO));
+            PostLike postLike = new PostLike();
+            postLike.UserId = userId;
+            postLike.PostId = postId;
+            postLike.CreatedDatetime = DateTime.UtcNow;
+            _context.PostLikes.Add(postLike);
             await _context.SaveChangesAsync();
 
-            return postLikeDTO;
+            Post post = (from tempPost in _context.Posts
+                         where tempPost.PostId == postId
+                         select tempPost).First();
+            var likes = ++post.LikesCount;
+            _context.SaveChangesAsync();
+
+
+
+            return "inserted successfully";
         }
 
         // DELETE: api/PostLikes/5
-        [HttpDelete("{userId}")]
-        public async Task<ActionResult<string>> DeletePostLike([FromBody] int postId, int userId)
+        [HttpDelete("deleteLike")]
+        public async Task<ActionResult<string>> DeletePostLike([FromQuery] int userId, [FromQuery] int postId)
         {
             if (_context.PostLikes == null)
             {
@@ -114,7 +127,13 @@ namespace WebApplicationMySql.Controllers
             }
 
             _context.PostLikes.Remove(postLike);
+            Post post = (from tempPost in _context.Posts
+                         where tempPost.PostId == postId
+                         select tempPost).First();
+            var likes = --post.LikesCount;
+           
             await _context.SaveChangesAsync();
+
 
             return "deleted successfully";
         }
