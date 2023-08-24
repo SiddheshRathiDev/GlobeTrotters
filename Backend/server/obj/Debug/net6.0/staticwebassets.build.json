@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "nZ8c+Oe+6UDL0Uvw4k3wZZtyGWBTB5W1ntA7z7SuXCE=",
+  "Source": "WebApplicationMySql",
+  "BasePath": "_content/WebApplicationMySql",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
