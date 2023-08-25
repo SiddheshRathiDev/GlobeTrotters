@@ -17,7 +17,7 @@ extra4 varchar(0)
 create table post (
 post_id int auto_increment primary key,
 user_id int,
-post_image longblob,
+post_url varchar(500),
 
 latitude double,
 longitude double,
