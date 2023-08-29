@@ -4,19 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Input, Paper, Typography } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { AuthContext } from "../../context/authContext";
-import { uploadPost as uploadPostApi } from '../../services/user';
+import { createUrl } from './utils/utils';
+import axios from 'axios';
+//import { AuthContext } from "../../context/authContext";
+//import { uploadPost as uploadPostApi } from '../../services/user';
 
 const UploadPost = () => {
-  const { currentUser } = useContext(AuthContext);
-  const userId = useSelector(state => state.userId);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const currentUserId = sessionStorage.getItem("currentUserId");
+
+  
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null); // Define the state for image preview
   const [caption, setCaption] = useState('');
   const [locationName, setLocationName] = useState('');
+
+
 
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
@@ -41,13 +45,36 @@ const UploadPost = () => {
   const handleUploadPost = async () => {
     try {
       // Create a new FormData instance and append the data
-      const formData = new FormData();
-      formData.append('image', imageFile);
-      formData.append('caption', caption);
-      formData.append('location', locationName);
+        
+      const UserId = currentUserId;
+      const ImageFile = imageFile;
+      const  Caption = caption;
+      const LocationName = locationName;
+      const Latitude = 0;
+      const Longitude = 0;
 
-      // Call the API to upload the post
-      const response = await uploadPostApi(userId, formData);
+      const formData = new FormData();
+      formData.append('UserId', 9);
+      formData.append('ImageFile', imageFile);
+      formData.append('Caption', caption);
+      formData.append('Latitude', 0);
+      formData.append('Longitude', 0);
+      formData.append('LocationName', locationName);
+
+     
+      const body = {
+        UserId,
+        ImageFile,
+        Caption,
+        Latitude,
+        Longitude,
+        LocationName
+      }
+    
+      const path = createUrl("/api/posts/upload_post");
+      const response = await axios.post(path, formData);
+
+      console.log(formData);
 
       if (response.status === 200) {
         // Show success toast and reset the state
@@ -82,7 +109,7 @@ const UploadPost = () => {
         {/* Use a label to trigger the file input */}
         <label htmlFor="file">
           <Input
-            type="file"
+            type="file" accept="image/*"
             id="file"
             style={{ display: 'none' }}
             onChange={handleImageChange}
@@ -116,6 +143,7 @@ const UploadPost = () => {
             Share
           </Button>
         </div>
+        <img src = {imagePreview}></img>
       </div>
     </Paper>
   );
