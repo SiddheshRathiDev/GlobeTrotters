@@ -1,0 +1,44 @@
+we have built a social media site specially for travellers. here we can share our experiences in posts and other people can like, comment. 
+we have used cutting edge technologies like react, mysql, .net core web api 
+Now I want to make a presenetation video for this so tell me appropiate narration of the whole project with the above ontext and functionalities inn my project . Not make too technical. Make it so that I can speak around 5 min approx. Also make the 1st paragraph the project overlook and data flow as well
+
+
+
+Problem Statement:
+
+Presenter on screen: "Traveling is amazing, but finding authentic travel experiences and connecting with like-minded explorers can be a challenge."
+
+
+
+"Introducing 'GlobeTrotters' - the ultimate social media platform for travelers. Here, you can share your travel adventures, gain inspiration, and connect with fellow wanderers."
+"Imagine a world where every travel memory is captured, shared, and celebrated. Our social media site for travelers is precisely that. Built using the latest technologies like React for a sleek user interface, MySQL to store data securely, and .NET Core Web API to ensure seamless interactions, our platform offers an experience tailored to the modern traveler."
+
+"Let's start our journey by signing in. 
+
+Our login page is your gateway to a world of travel experiences and connections."
+
+
+
+When users scroll through their feed, they'll see various travel-related posts from other users.
+Each post will have a "like" button beneath it.
+each post will also have a "comment" button beneath it.
+Likes and comments are crucial for fostering engagement on the platform. They encourage users to connect, share their thoughts, and build a sense of community around travel experiences.
+
+
+in suggestions for you top users with highest post engagement will appear, you can visit their profile, connect to them and join their journeys
+
+ you can create posts showcasing your travel stories, complete with photos, and descriptive text. Other users can then explore, like, and comment on your posts, creating a vibrant community of like-minded adventurers."
+
+.
+
+
+"But our platform is more than just sharing experiences. It's about building connections. You can engage with fellow travelers by liking their posts and leaving thoughtful comments, fostering a sense of community and inspiration."
+
+you can search fellow travellers by their user name or actual names, visit their profiles and then create a meaningful connection with them.
+
+
+
+"So, why wait? Join us today and embark on a journey where every adventure is a story waiting to be told. Welcome to the world of limitless travel experiences, right at your fingertips."
+
+
+
