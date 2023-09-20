@@ -23,20 +23,13 @@ namespace GlobeTrotters.Controllers
         }
 
         // GET: api/Trips
-        [HttpGet("getIndividualTrip/{userId}")]
-        public async Task<ActionResult<IEnumerable<Trip>>> GetTrips(int userId)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Trip>>> GetTrips()
         {
           if (_context.Trips == null)
           {
               return NotFound();
-          }else
-            {
-                var trips = (from t in _context.Trips
-                             where t.UserId == userId
-                             select t.TripId).ToList();
-
-                return Ok(trips);
-            }
+          }
             return await _context.Trips.ToListAsync();
         }
 
@@ -93,7 +86,7 @@ namespace GlobeTrotters.Controllers
         // POST: api/Trips
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Trip>> PostTrip(TripDTO tripDTO)
+        public ActionResult PostTrip(TripDTO tripDTO)
         {
           if (_context.Trips == null)
           {
@@ -104,12 +97,10 @@ namespace GlobeTrotters.Controllers
             trip.Itinerary = tripDTO.Itinerary;
             trip.LocationName = tripDTO.LocationName;
             trip.InterestedCount = 0;
-            trip.Latitude = 0;
-            trip.Longitude = 0;
             _context.Trips.Add(trip);
-            await _context.SaveChangesAsync();
+            _context.SaveChangesAsync();
 
-            return Ok("operation successful");
+            return Ok();
         }
 
         // DELETE: api/Trips/5
